@@ -61,10 +61,8 @@ class FlashClassifier(nn.Module):
         self.backbone_size = real_size
         self.class_names = class_names or [str(i) for i in range(num_classes)]
 
-        mcfg = MODEL_SIZE_MAP.get(real_size, MODEL_SIZE_MAP["1.0x"])
-
-        self.backbone = ShuffleNetV2(size=real_size, pretrained=pretrained)
-        feature_channels = mcfg["last_conv"]
+        self.backbone = ShuffleNetV2(model_size=real_size, pretrained=pretrained)
+        feature_channels = self.backbone.out_channels
 
         self.gap = nn.AdaptiveAvgPool2d(1)
         self.dropout = nn.Dropout(dropout) if dropout > 0 else nn.Identity()

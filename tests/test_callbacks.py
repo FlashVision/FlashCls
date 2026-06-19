@@ -1,6 +1,5 @@
 """Tests for callbacks system."""
 
-import pytest
 
 from flashcls.engine.callbacks import (
     Callback,

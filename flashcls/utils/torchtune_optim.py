@@ -10,10 +10,8 @@ Techniques ported from https://github.com/meta-pytorch/torchtune:
 """
 
 import logging
-from typing import Optional
 
 import torch
-import torch.nn as nn
 from torch.utils.checkpoint import checkpoint as torch_checkpoint
 
 logger = logging.getLogger(__name__)

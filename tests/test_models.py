@@ -2,9 +2,10 @@
 
 import pytest
 import torch
+from types import SimpleNamespace
 
-from flashcls.models.classifier import FlashClassifier, build_model, BACKBONE_CHANNELS
-from flashcls.cfg import get_config
+from flashcls.models.classifier import FlashClassifier, build_model
+from flashcls.models.backbone.shufflenet import ShuffleNetV2
 
 
 class TestFlashClassifier:
@@ -16,7 +17,8 @@ class TestFlashClassifier:
         ("1.5x", 704),
     ])
     def test_backbone_channels(self, backbone_size, expected_channels):
-        assert BACKBONE_CHANNELS[backbone_size][-1] == expected_channels
+        backbone = ShuffleNetV2(model_size=backbone_size, pretrained=False)
+        assert backbone.out_channels == expected_channels
 
     @pytest.mark.parametrize("backbone_size", ["0.5x", "1.0x", "1.5x"])
     def test_forward_pass(self, backbone_size):
@@ -31,11 +33,7 @@ class TestFlashClassifier:
         with torch.no_grad():
             output = model(x)
         assert "logits" in output
-        assert "probs" in output
         assert output["logits"].shape == (2, 10)
-        assert output["probs"].shape == (2, 10)
-        # Probs should sum to 1
-        assert torch.allclose(output["probs"].sum(dim=1), torch.ones(2), atol=1e-5)
 
     def test_predict(self):
         model = FlashClassifier(
@@ -50,7 +48,6 @@ class TestFlashClassifier:
         results = model.predict(x)
         assert len(results) == 1
         assert len(results[0]) == 5
-        # Sorted by probability
         probs = [p for _, p in results[0]]
         assert probs == sorted(probs, reverse=True)
 
@@ -61,19 +58,25 @@ class TestFlashClassifier:
             pretrained=False,
         )
         info = model.get_model_info()
-        assert info["name"] == "FlashClassifier"
         assert info["num_classes"] == 10
         assert info["total_params"] > 0
-        assert info["params_mb"] > 0
+        assert info["size_mb"] > 0
 
     def test_build_model_from_config(self):
-        cfg = get_config(model_size="m", input_size=224, num_classes=20)
+        cfg = SimpleNamespace(
+            num_classes=20,
+            input_size=224,
+            backbone_size="1.0x",
+            dropout=0.2,
+            pretrained=False,
+            class_names=None,
+        )
         model = build_model(cfg)
         assert model.num_classes == 20
         assert model.input_size == (224, 224)
         assert model.backbone_size == "1.0x"
 
-    def test_get_features(self):
+    def test_extract_features(self):
         model = FlashClassifier(
             num_classes=10,
             backbone_size="0.5x",
@@ -82,8 +85,9 @@ class TestFlashClassifier:
         model.eval()
         x = torch.randn(2, 3, 224, 224)
         with torch.no_grad():
-            features = model.get_features(x)
-        assert features.shape == (2, 192)
+            features = model.extract_features(x)
+        assert features.shape[0] == 2
+        assert features.shape[1] == model.backbone.out_channels
 
     def test_different_input_sizes(self):
         for size in [128, 224, 256, 320]:

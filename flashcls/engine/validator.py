@@ -1,7 +1,7 @@
 """FlashCls Validator — compute Top-1/Top-5 accuracy on a validation set."""
 
 import logging
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
 import torch
 import torch.nn as nn

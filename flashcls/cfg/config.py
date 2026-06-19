@@ -5,7 +5,7 @@ Provides model configuration via MODEL_SIZE_MAP and the get_config() factory.
 """
 
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from flashcls.models.backbone import (
     ShuffleNetV2,
