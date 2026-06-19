@@ -1,0 +1,26 @@
+model:
+  backbone_size: "1.0x"
+  num_classes: 1000
+  input_size: [224, 224]
+  dropout: 0.2
+
+data:
+  train_dir: data/imagenet/train
+  val_dir: data/imagenet/val
+  num_workers: 8
+
+train:
+  epochs: 300
+  batch_size: 256
+  learning_rate: 0.1
+  weight_decay: 0.00004
+  warmup_epochs: 5
+  val_interval: 1
+  save_dir: workspace/imagenet_m
+  label_smoothing: 0.1
+
+augment:
+  random_resized_crop: true
+  horizontal_flip: 0.5
+  color_jitter: [0.4, 0.4, 0.4, 0.1]
+  auto_augment: imagenet

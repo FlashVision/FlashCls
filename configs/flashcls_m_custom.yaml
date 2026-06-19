@@ -1,0 +1,27 @@
+model:
+  backbone_size: "1.0x"
+  num_classes: 10
+  input_size: [224, 224]
+  dropout: 0.2
+
+data:
+  train_dir: data/custom/train
+  val_dir: data/custom/val
+  num_workers: 4
+
+train:
+  epochs: 100
+  batch_size: 64
+  learning_rate: 0.001
+  weight_decay: 0.05
+  warmup_epochs: 5
+  val_interval: 1
+  save_dir: workspace/custom_m
+  label_smoothing: 0.1
+  mixup_alpha: 0.2
+  cutmix_alpha: 1.0
+
+augment:
+  random_resized_crop: true
+  horizontal_flip: 0.5
+  color_jitter: [0.4, 0.4, 0.4, 0.1]

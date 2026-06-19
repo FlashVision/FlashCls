@@ -1,0 +1,21 @@
+model:
+  backbone_size: "0.5x"
+  num_classes: 10
+  input_size: [224, 224]
+  dropout: 0.1
+
+data:
+  train_dir: data/custom/train
+  val_dir: data/custom/val
+  num_workers: 4
+
+train:
+  epochs: 100
+  batch_size: 64
+  learning_rate: 0.001
+  save_dir: workspace/kd_m05x
+  use_kd: true
+  kd_teacher_checkpoint: workspace/teacher/model_best_inference.pth
+  kd_teacher_model_size: "m-1.5x"
+  kd_temperature: 4.0
+  kd_alpha: 0.7
