@@ -8,7 +8,10 @@ from .backbone import (
     ResNet,
     ConvNeXt,
     VisionTransformer,
+    DINOv2Backbone,
 )
+from .head import ClassificationHead, MultiLabelHead, AsymmetricLoss
+from .architectures import DINOv2Backbone as _DINOv2  # noqa: F811
 
 __all__ = [
     "ShuffleNetV2",
@@ -17,4 +20,8 @@ __all__ = [
     "ResNet",
     "ConvNeXt",
     "VisionTransformer",
+    "DINOv2Backbone",
+    "ClassificationHead",
+    "MultiLabelHead",
+    "AsymmetricLoss",
 ]

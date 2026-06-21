@@ -4,6 +4,7 @@ from .efficientnet import EfficientNet
 from .resnet import ResNet
 from .convnext import ConvNeXt
 from .vit import VisionTransformer
+from flashcls.models.architectures.dinov2 import DINOv2Backbone
 
 __all__ = [
     "ShuffleNetV2",
@@ -12,4 +13,5 @@ __all__ = [
     "ResNet",
     "ConvNeXt",
     "VisionTransformer",
+    "DINOv2Backbone",
 ]
