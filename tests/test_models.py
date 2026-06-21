@@ -11,11 +11,14 @@ from flashcls.models.backbone.shufflenet import ShuffleNetV2
 class TestFlashClassifier:
     """Test FlashClassifier model variants."""
 
-    @pytest.mark.parametrize("backbone_size,expected_channels", [
-        ("0.5x", 192),
-        ("1.0x", 464),
-        ("1.5x", 704),
-    ])
+    @pytest.mark.parametrize(
+        "backbone_size,expected_channels",
+        [
+            ("0.5x", 192),
+            ("1.0x", 464),
+            ("1.5x", 704),
+        ],
+    )
     def test_backbone_channels(self, backbone_size, expected_channels):
         backbone = ShuffleNetV2(model_size=backbone_size, pretrained=False)
         assert backbone.out_channels == expected_channels

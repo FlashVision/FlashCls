@@ -9,8 +9,11 @@ class TestDINOv2Backbone:
         from flashcls.models.architectures.dinov2 import DINOv2Backbone
 
         model = DINOv2Backbone(
-            variant="dinov2_vits14", num_classes=10,
-            pretrained=False, freeze_backbone=False, dropout=0.0,
+            variant="dinov2_vits14",
+            num_classes=10,
+            pretrained=False,
+            freeze_backbone=False,
+            dropout=0.0,
         )
         model.eval()
         x = torch.randn(2, 3, 224, 224)
@@ -24,8 +27,10 @@ class TestDINOv2Backbone:
         from flashcls.models.architectures.dinov2 import DINOv2Backbone
 
         model = DINOv2Backbone(
-            variant="dinov2_vits14", num_classes=5,
-            pretrained=False, freeze_backbone=True,
+            variant="dinov2_vits14",
+            num_classes=5,
+            pretrained=False,
+            freeze_backbone=True,
         )
         backbone_params = sum(p.requires_grad for p in model.feature_extractor.parameters())
         assert backbone_params == 0
@@ -34,8 +39,10 @@ class TestDINOv2Backbone:
         from flashcls.models.architectures.dinov2 import DINOv2Backbone
 
         model = DINOv2Backbone(
-            variant="dinov2_vits14", num_classes=5,
-            pretrained=False, freeze_backbone=True,
+            variant="dinov2_vits14",
+            num_classes=5,
+            pretrained=False,
+            freeze_backbone=True,
         )
         model.unfreeze_backbone()
         trainable = sum(p.requires_grad for p in model.feature_extractor.parameters())
@@ -46,7 +53,8 @@ class TestDINOv2Backbone:
         from flashcls.models.architectures.dinov2 import DINOv2Backbone
 
         model = DINOv2Backbone(
-            variant="dinov2_vits14", num_classes=5,
+            variant="dinov2_vits14",
+            num_classes=5,
             pretrained=False,
         )
         x = torch.randn(2, 3, 224, 224)
@@ -65,6 +73,7 @@ class TestDINOv2Backbone:
 
     def test_registry(self):
         from flashcls.registry import BACKBONES
+
         assert "DINOv2" in BACKBONES
 
 
@@ -86,7 +95,9 @@ class TestDistillation:
         from flashcls.training.distillation import DistillationLoss
 
         criterion = DistillationLoss(
-            temperature=4.0, alpha=0.7, beta=0.5,
+            temperature=4.0,
+            alpha=0.7,
+            beta=0.5,
             feature_dims=(128, 256),
         )
         student_logits = torch.randn(4, 10)
@@ -95,8 +106,11 @@ class TestDistillation:
         student_features = torch.randn(4, 128)
         teacher_features = torch.randn(4, 256)
         result = criterion(
-            student_logits, teacher_logits, targets,
-            student_features, teacher_features,
+            student_logits,
+            teacher_logits,
+            targets,
+            student_features,
+            teacher_features,
         )
         assert "feat_loss" in result
         assert result["loss"].requires_grad
@@ -120,7 +134,11 @@ class TestDistillation:
         teacher = SimpleModel(128)
 
         trainer = DistillationTrainer(
-            student, teacher, temperature=4.0, alpha=0.7, device="cpu",
+            student,
+            teacher,
+            temperature=4.0,
+            alpha=0.7,
+            device="cpu",
         )
         images = torch.randn(2, 3, 32, 32)
         targets = torch.randint(0, 5, (2,))
@@ -143,9 +161,12 @@ class TestSSL:
         from flashcls.training.ssl import MAEDecoder
 
         decoder = MAEDecoder(
-            encoder_dim=64, decoder_dim=32,
-            decoder_depth=1, decoder_heads=2,
-            patch_size=16, num_patches=196,
+            encoder_dim=64,
+            decoder_dim=32,
+            decoder_depth=1,
+            decoder_heads=2,
+            patch_size=16,
+            num_patches=196,
         )
         encoded = torch.randn(2, 50, 64)
         vis_idx = torch.arange(50).unsqueeze(0).expand(2, -1)
@@ -166,8 +187,12 @@ class TestSSL:
 
         backbone = DummyBackbone()
         trainer = SSLTrainer(
-            backbone, method="mae", feature_dim=64, device="cpu",
-            mae_decoder_dim=48, mae_decoder_depth=1,
+            backbone,
+            method="mae",
+            feature_dim=64,
+            device="cpu",
+            mae_decoder_dim=48,
+            mae_decoder_depth=1,
         )
         images = torch.randn(2, 3, 224, 224)
         result = trainer.train_step_mae(images)
@@ -230,4 +255,5 @@ class TestMultiLabelHead:
 
     def test_registry(self):
         from flashcls.registry import HEADS
+
         assert "MultiLabelHead" in HEADS

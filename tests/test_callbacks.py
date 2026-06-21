@@ -1,6 +1,5 @@
 """Tests for callbacks system."""
 
-
 from flashcls.engine.callbacks import (
     Callback,
     CallbackList,
