@@ -24,4 +24,5 @@ __all__ = [
     "ClassificationHead",
     "MultiLabelHead",
     "AsymmetricLoss",
+    "_DINOv2",
 ]

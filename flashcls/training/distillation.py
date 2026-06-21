@@ -10,9 +10,8 @@ Reference:
     Hinton et al., "Distilling the Knowledge in a Neural Network", 2015.
 """
 
-import copy
 import logging
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, Optional, Tuple
 
 import torch
 import torch.nn as nn

@@ -1,6 +1,5 @@
 """Tests for new FlashCls components: DINOv2, distillation, SSL, multi-label head."""
 
-import pytest
 import torch
 import torch.nn as nn
 
